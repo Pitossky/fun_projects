@@ -1,0 +1,62 @@
+import random
+
+attempts = []
+
+def show_score():
+    if not attempts:
+        print("No high score, play game")
+
+    else: 
+        print(f"current high score is: {min(attempts)}")
+
+def start_game():
+    attempt = 0
+    rand_num = random.randint(1, 10)
+    print("Welcome!")
+    player_name = input('What is your name? ')
+    wannaPlay = input(f"Hi, {player_name}, would you like to play? (Enter Yes/No): ").lower()
+
+    if wannaPlay != 'yes':
+        print("Thanks!")
+        quit()
+    else:
+        show_score()
+    
+    while wannaPlay == 'yes':
+        try:
+            guesses = int(input("Pick a number between 1 and 10: "))
+            if guesses < 1 or guesses > 10:
+                raise ValueError('Number not within range')
+            
+            attempt += 1
+            attempts.append(attempt)
+            print(f"total attempts: {attempts}")
+            print(f"total attempts no: {len(attempts)}")
+
+            if guesses == rand_num:
+                print("Nice! You got it!")
+                print(f"It took you {attempt} attempts")
+                wannaPlay = input("Would you like to play again? (Enter Yes/No): ").lower()
+                if wannaPlay != "yes":
+                    print("Have a good one")
+                    break
+
+                else:
+                    attempt = 0
+                    rand_num = random.randint(1, 10)
+                    show_score()
+                    continue
+            else:
+                if guesses > rand_num:
+                    print("Number too high")
+                elif guesses < rand_num:
+                    print("Number too low")
+        
+        except ValueError as err:
+            print("Number not valid, Try again...")
+            print(err)
+
+
+if __name__ == '__main__':
+    start_game()
+
