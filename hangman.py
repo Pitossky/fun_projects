@@ -1,50 +1,111 @@
 import random
-import os
 
-def num_die():
-    while True:
-        try:
-            num_dice = input("Number of dice: ")
-            valid_inputs = ["1", "one", "2", "two"]
-            if num_dice not in valid_inputs:
-                raise ValueError("1 or 2 only")
+
+HANGMAN = [
+    '   _____ \n'
+    '  |      \n'
+    '  |      \n'
+    '  |      \n'
+    '  |      \n'
+    '  |      \n'
+    '  |      \n'
+    '__|__\n',
+    '   _____ \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |      \n'
+    '  |      \n'
+    '  |      \n'
+    '  |      \n'
+    '__|__\n',
+    '   _____ \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |      \n'
+    '  |      \n'
+    '  |      \n'
+    '__|__\n',
+    '   _____ \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |     O \n'
+    '  |      \n'
+    '  |      \n'
+    '__|__\n',
+    '   _____ \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |     O \n'
+    '  |    /| \n'
+    '  |      \n'
+    '__|__\n',
+    '   _____ \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |     | \n'
+    '  |     O \n'
+    '  |    /| \n'
+    '  |    /| \n'
+    '__|__\n',
+
+]
+
+WORDS = ['january', 'border', 'image', 'film', 'promise', 'kids',
+       'lungs', 'doll', 'rhyme', 'damage', 'plants', 'hello', 'world']
+    
+MAX_WRONG_GUESSES = len(HANGMAN) - 1
+
+word = random.choice(WORDS)
+
+current_guess = '_' * len(word)
+
+wrong_guesses = 0
+
+guessed_letters = []
+
+print("Welcome to Hangman")
+print("Try to guess the word")
+
+while wrong_guesses < MAX_WRONG_GUESSES and current_guess != word:
+    print(HANGMAN[wrong_guesses])
+    print("You have used the following letters: ", guessed_letters)
+    print("So far the word is: ", current_guess)
+
+    guess = input("Enter your guess: ").strip()
+    while len(guess) == 0 or len(guess) > 1:
+            print("Enter a single letter \n")
+            guess = input('Enter one letter as guess: ').strip()
+    
+    while guess in guessed_letters:
+        print(f"You have already guessed the letter {guess}")
+        guess = input("Enter another guess: ").strip()
+
+    guessed_letters.append(guess)
+
+    if guess in word:
+        print("Congratulations, You have guessed correctly!!")
+        new_current_guess = ""
+
+        for letter in range(len(word)):
+            if guess == word[letter]:
+                new_current_guess += guess
             else:
-                return num_dice
-        except ValueError as err:
-            print(err)
+                new_current_guess += current_guess[letter]
+        
+        current_guess = new_current_guess
+    
+    else:
+        print("Sorry that was incorrect")
+        wrong_guesses += 1
 
-def dice_roll():
-    min_val = 1
-    max_val = 6
-    roll_again = "yes"
+if wrong_guesses == MAX_WRONG_GUESSES:
+    print(HANGMAN[wrong_guesses])
+    print("You have been hanged!!")
+    print("The correct word is: ", word)
 
-    while roll_again.lower() == "yes":
-        print("os name is: ", os.name)
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print(f"os module: {os.system('cls' if os.name == 'nt' else 'clear')}")
-        amount = num_die()
-
-        if amount == "2" or amount == "two":
-            print("Rolling the dice...")
-            dice_1 = random.randint(min_val, max_val) 
-            dice_2 = random.randint(min_val, max_val)
-
-            print("The values are:")
-            print("Dice 1: ", dice_1)
-            print("Dice 2: ", dice_2)
-            print("Total: ", dice_1 + dice_2)
-
-            roll_again = input("Roll again? ")
-
-        else:
-            print("Rolling the dice...")
-            dice_1 = random.randint(min_val, max_val) 
-            print(f"The value is: {dice_1}")
-
-            roll_again = input("Roll again? ")
-
-if __name__ == '__main__':
-    dice_roll()
-            
-
+else:
+    print("You have won!!")
 
